@@ -2,9 +2,10 @@ import { Room, TextFieldsOutlined } from "@mui/icons-material";
 
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useState } from "react";
-import ReactMapGl, { Layer, Marker } from "react-map-gl";
+import ReactMapGl, { Layer, Marker, Source } from "react-map-gl";
 import "./index.css";
-import Source from "react-map-gl/dist/esm/components/source";
+// import Source from "react-map-gl/dist/esm/components/source";
+import logoBank from "./assets/logoBank.png";
 import { Button, FormControl, FormLabel, TextField } from "@mui/material";
 const TOKEN =
   "pk.eyJ1Ijoia2lyaXRvYWZ0YWIiLCJhIjoiY2xuNDdiZDhsMHUwOTJscGhzcmN6d281NyJ9.tfmVbiTUhxl21BH-GMQh5A";
@@ -20,31 +21,25 @@ function App() {
   });
 
   const [pathData, setPathData] = useState(null);
-
+  const [path2Data, setPath2Data] = useState(null);
   async function handleClick(e) {
     if (e) {
-      console.log(e.lngLat.lat);
-      console.log(e.lngLat.lng);
-      const latitude = e.lngLat.lat;
-      const longitude = e.lngLat.lng;
+      // console.log(e.lngLat.lat);
+      // console.log(e.lngLat.lng);
+      // const latitude = e.lngLat.lat;
+      // const longitude = e.lngLat.lng;
       console.log(`here`);
-      setNewPlace({
-        lat: pin[0],
-        long: pin[1],
-      });
+      
 
-      setSrcPlace({
-        lat: path[0][0],
-        long: path[0][1],
-      });
+      const pathDataJSON = makePath(srcPlace, destPlace);
 
-      console.log(path[path.length - 1]);
-      setDestPlace({
-        lat: path[path.length - 1][0],
-        long: path[path.length - 1][1],
-      });
+      setPathData(pathDataJSON);
 
-      makePath(srcPlace, destPlace);
+      const path2DataJSON = makePath(
+        { lat: path2[0][0], long: path2[0][1] },
+        { lat: path2[path2.length - 1][0], long: path2[path2.length - 1][1] }
+      );
+      setPath2Data(path2DataJSON);
     }
   }
 
@@ -61,8 +56,7 @@ function App() {
           ],
         },
       };
-      console.log(dataOne);
-      setPathData(dataOne);
+      return dataOne;
     }
   }
 
@@ -130,29 +124,130 @@ function App() {
   // console.log(route[0].path)
 
   const [path, setPath] = useState(route[0].path);
+  const [path2, setPath2] = useState(route[1].path);
 
-  const pairs = path.reduce((result, value, index, array) => {
-    if (index % 2 === 0) {
-      result.push(array.slice(index, index + 2));
-    }
-    return result;
-  }, []);
+  const [awbInput, setAwbInput] = useState(null);
+  const [formSubmit, setFormSubmit] = useState(false);
+  function handleSubmit() {
+    console.log(`AWB input ${awbInput.toUpperCase()}`);
+    setNewPlace({
+      lat: pin[0],
+      long: pin[1],
+    });
 
+    setSrcPlace({
+      lat: path[0][0],
+      long: path[0][1],
+    });
+
+    console.log(path[path.length - 1]);
+    setDestPlace({
+      lat: path[path.length - 1][0],
+      long: path[path.length - 1][1],
+    });
+    setFormSubmit(true);
+  }
   return (
     <>
       <div className="flex flex-row">
-       <div className="basis-1/3"> 
-          <h1>icici logo</h1>
-          <h1>Enter your AWB number</h1>
-          <h1>input number -- text+ number</h1>
+        <div className="basis-1/3">
+          <img
+            className="h-16 max-w-full ml-8 mt-8"
+            src={logoBank}
+            alt="image description"
+          />
 
-          <h1>Marker ka image ----   Taiwan</h1>
+          <form className="ml-6 mt-12">
+            <label
+              htmlFor="awb"
+              className="block mb-2 font-serif text-2xl dark:text-white"
+            >
+              Enter AWB number
+            </label>
+            <div className="flex flex-row">
+              <input
+                type="text"
+                id="awb"
+                className="bg-gray-50 uppercase border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-56 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="Enter AWB number"
+                onChange={(e) => setAwbInput(e.target.value)}
+              />
+              <button
+                type="button"
+                className=" ml-5 mt-2 focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                onClick={handleSubmit}
+              >
+                SUBMIT
+              </button>
+            </div>
+          </form>
+          {formSubmit ? (
+            <div className="grid grid-flow-row auto-rows-max">
+              <div className="flex flex-col items-center bg-white  rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+                <img
+                  className="w-20 h-24 rounded-full"
+                  src="https://media.istockphoto.com/id/536052589/vector/map-symbol.jpg?s=612x612&w=0&k=20&c=4GjzKnytSyiFQQi8GYuP8yHnfctb5cLc_46K7dJQRoc="
+                  alt="Source marker"
+                />
+                <div className="flex flex-col justify-between p-4 leading-normal">
+                  <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                    Source Location
+                  </h5>
+                  <p className="mb-3 font-semibold  text-gray-700 dark:text-gray-400">
+                    Chennai , Tamil Nadu, India 
+                  </p>
+                  <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                    Latitude: {srcPlace.lat} Longitude : {srcPlace.long}
+                  </p>
+                </div>
+              </div>
 
-          <h1>Marker ka image --- Chennai</h1>
+              <div className="flex flex-col items-center bg-white  rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+                <img
+                  className="w-20 h-24 rounded-full"
+                  src="https://media.istockphoto.com/id/536052589/vector/map-symbol.jpg?s=612x612&w=0&k=20&c=4GjzKnytSyiFQQi8GYuP8yHnfctb5cLc_46K7dJQRoc="
+                  alt="Destination marker"
+                />
+                <div className="flex flex-col justify-between p-4 leading-normal">
+                  <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                    Destination Location
+                  </h5>
+                  <p className="mb-3 font-semibold  text-gray-700 dark:text-gray-400">
+                    Qijin District, Taiwan 
+                  </p>
+                  <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                    Latitude: {destPlace.lat} Longitude : {destPlace.long}
+                  </p>
+                </div>
+              </div>
 
-          <h1>Marker ka image --- Tibet</h1>
-       </div>
-        <div className="basis-2/3" style={{ width: "100vw", height: "100vh", zIndex: 999 }}>
+              <div className="flex flex-col items-center bg-white  rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+                <img
+                  className="w-20 h-24 rounded-full"
+                  src="https://media.istockphoto.com/id/536052589/vector/map-symbol.jpg?s=612x612&w=0&k=20&c=4GjzKnytSyiFQQi8GYuP8yHnfctb5cLc_46K7dJQRoc="
+                  alt="Source marker"
+                />
+                <div className="flex flex-col justify-between p-4 leading-normal">
+                  <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                    Next Location
+                  </h5>
+                  <p className="mb-3 font-semibold  text-gray-700 dark:text-gray-400">
+                    Hakata Port , Fukouka, Japan 
+                  </p>
+                  <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                    Latitude: {newPlace.lat} Longitude : {newPlace.long}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ) : (
+            ``
+          )}
+        </div>
+        <div
+          className="basis-2/3"
+          style={{ width: "100vw", height: "100vh", zIndex: 999 }}
+        >
           <ReactMapGl
             {...viewPort}
             mapboxAccessToken={TOKEN}
@@ -161,15 +256,17 @@ function App() {
             transitionDuration="200"
             mapStyle="mapbox://styles/kiritoaftab/clf9s30t000gh01pevrhhm9k9"
             onViewportChange={(viewPort) => setViewPort(viewPort)}
-            onDblClick={handleClick} 
+            onDblClick={handleClick}
             projection="globe"
+            boxZoom={true}
+            dragPan={true}
           >
             {srcPlace ? (
               <Marker latitude={srcPlace.lat} longitude={srcPlace.long}>
                 <Room
                   style={{
                     fontSize: 7 * viewPort.zoom,
-                    color: "tomato",
+                    color: "blue",
                     cursor: "pointer",
                   }}
                 />
@@ -177,11 +274,11 @@ function App() {
             ) : null}
 
             {destPlace ? (
-              <Marker latitude={22.61626} longitude={120.31333000000001}>
+              <Marker latitude={destPlace.lat} longitude={destPlace.long}>
                 <Room
                   style={{
                     fontSize: 7 * viewPort.zoom,
-                    color: "blue",
+                    color: "tomato",
                     cursor: "pointer",
                   }}
                 />
@@ -217,6 +314,24 @@ function App() {
               </Source>
             ) : null}
 
+            {/* {path2Data ? (
+              <Source id="polyLineLayer" type="geojson" data={path2Data}>
+                <Layer
+                  id="lineLayer"
+                  type="line"
+                  source="my-data"
+                  layout={{
+                    "line-join": "round",
+                    "line-cap": "round",
+                  }}
+                  paint={{
+                    "line-color": "rgba(0, 0, 0, 0.8)",
+                    "line-width": 3,
+                  }}
+                />
+              </Source>
+            ) : null} */}
+
             {path
               ? path.map((p, index) => {
                   return (
@@ -234,31 +349,21 @@ function App() {
                   );
                 })
               : null}
-            {path
-              ? path.map((p, index) => {
-                  // console.log(p)
-                  if (index == path.length) {
-                    return;
-                  }
-                })
-              : null}
-
-            {pairs
-              ? pairs.map((pair, index) => {
-                  var A = pair[0];
-                  var B = pair[1];
-                  if (A && B) {
-                    console.log(`${A} --> ${B}`);
-                    const dataOne = {
-                      type: "Feature",
-                      properties: {},
-                      geometry: {
-                        type: "LineString",
-                        coordinates: [A, B],
-                      },
-                    };
-                    console.log(dataOne);
-                  }
+            {path2
+              ? path2.map((p, index) => {
+                  return (
+                    <>
+                      <Marker latitude={p[0]} longitude={p[1]} key={index}>
+                        <Room
+                          style={{
+                            fontSize: 7 * viewPort.zoom,
+                            color: "black",
+                            cursor: "pointer",
+                          }}
+                        />
+                      </Marker>
+                    </>
+                  );
                 })
               : null}
           </ReactMapGl>
