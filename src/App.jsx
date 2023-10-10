@@ -11,8 +11,6 @@ import green from "./assets/green.png"
 import yellow from "./assets/yellow.png"
 
 import { Button, FormControl, FormLabel, TextField } from "@mui/material";
-import VerticalLineWrapper from "./VerticalLine/VerticalLineWrapper";
-import VerticalLineContent from "./VerticalLine/VerticalLineContent";
 const TOKEN =
   "pk.eyJ1Ijoia2lyaXRvYWZ0YWIiLCJhIjoiY2xuNDdiZDhsMHUwOTJscGhzcmN6d281NyJ9.tfmVbiTUhxl21BH-GMQh5A";
 
