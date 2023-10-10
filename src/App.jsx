@@ -6,7 +6,13 @@ import ReactMapGl, { Layer, Marker, Source } from "react-map-gl";
 import "./index.css";
 // import Source from "react-map-gl/dist/esm/components/source";
 import logoBank from "./assets/logoBank.png";
+import red from "./assets/red.png"
+import green from "./assets/green.png"
+import yellow from "./assets/yellow.png"
+
 import { Button, FormControl, FormLabel, TextField } from "@mui/material";
+import VerticalLineWrapper from "./VerticalLine/VerticalLineWrapper";
+import VerticalLineContent from "./VerticalLine/VerticalLineContent";
 const TOKEN =
   "pk.eyJ1Ijoia2lyaXRvYWZ0YWIiLCJhIjoiY2xuNDdiZDhsMHUwOTJscGhzcmN6d281NyJ9.tfmVbiTUhxl21BH-GMQh5A";
 
@@ -158,23 +164,11 @@ function App() {
           />
 
           <form className="ml-6 mt-12">
-            <label
-              htmlFor="awb"
-              className="block mb-2 font-serif text-2xl dark:text-white"
-            >
-              Enter AWB number
-            </label>
             <div className="flex flex-row">
-              <input
-                type="text"
-                id="awb"
-                className="bg-gray-50 uppercase border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-56 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Enter AWB number"
-                onChange={(e) => setAwbInput(e.target.value)}
-              />
+            <TextField id="outlined-basic" inputProps={{ style: { textTransform: "uppercase" } }} label="AWB Number" variant="outlined" onChange={(e)=> setAwbInput(e.target.value)}/>
               <button
                 type="button"
-                className=" ml-5 mt-2 focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                className=" ml-5 mt-2 focus:outline-none text-white bg-lime-600 hover:bg-yellow-600  font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
                 onClick={handleSubmit}
               >
                 SUBMIT
@@ -182,11 +176,13 @@ function App() {
             </div>
           </form>
           {formSubmit ? (
-            <div className="grid grid-flow-row auto-rows-max">
-              <div className="flex flex-col items-center bg-white  rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+       
+            <div className="grid grid-flow-row auto-rows-max mt-8 gap-4">
+            
+              <div className="flex flex-col  bg-white  rounded-lg  md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
                 <img
-                  className="w-20 h-24 rounded-full"
-                  src="https://media.istockphoto.com/id/536052589/vector/map-symbol.jpg?s=612x612&w=0&k=20&c=4GjzKnytSyiFQQi8GYuP8yHnfctb5cLc_46K7dJQRoc="
+                  className="w-16 h-16 mt-5 rounded-full"
+                  src={yellow}
                   alt="Source marker"
                 />
                 <div className="flex flex-col justify-between p-4 leading-normal">
@@ -201,11 +197,12 @@ function App() {
                   </p>
                 </div>
               </div>
-
-              <div className="flex flex-col items-center bg-white  rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+       
+          
+              <div className="flex flex-col  bg-white  rounded-lg  md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
                 <img
-                  className="w-20 h-24 rounded-full"
-                  src="https://media.istockphoto.com/id/536052589/vector/map-symbol.jpg?s=612x612&w=0&k=20&c=4GjzKnytSyiFQQi8GYuP8yHnfctb5cLc_46K7dJQRoc="
+                  className="w-16 h-16 mt-5 rounded-full"
+                  src={red}
                   alt="Destination marker"
                 />
                 <div className="flex flex-col justify-between p-4 leading-normal">
@@ -220,12 +217,13 @@ function App() {
                   </p>
                 </div>
               </div>
-
-              <div className="flex flex-col items-center bg-white  rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+             
+         
+              <div className="flex flex-col  bg-white  rounded-lg  md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
                 <img
-                  className="w-20 h-24 rounded-full"
-                  src="https://media.istockphoto.com/id/536052589/vector/map-symbol.jpg?s=612x612&w=0&k=20&c=4GjzKnytSyiFQQi8GYuP8yHnfctb5cLc_46K7dJQRoc="
-                  alt="Source marker"
+                  className="w-16 h-16 mt-5 rounded-full"
+                  src={green}
+                  alt="New marker"
                 />
                 <div className="flex flex-col justify-between p-4 leading-normal">
                   <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
@@ -239,7 +237,9 @@ function App() {
                   </p>
                 </div>
               </div>
+              
             </div>
+          
           ) : (
             ``
           )}
